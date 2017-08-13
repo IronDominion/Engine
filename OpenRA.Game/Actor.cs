@@ -96,6 +96,16 @@ namespace OpenRA
 					throw new NotImplementedException("No rules definition for unit " + name);
 
 				Info = world.Map.Rules.Actors[name];
+
+				if (Info.HasTraitInfo<VariationsInfo>())
+				{
+					if (!initDict.Contains<PreventVariationsInit>() || !init.Get<PreventVariationsInit, bool>())
+					{
+						name = Info.TraitInfo<VariationsInfo>().Variations.Random(world.SharedRandom).ToLowerInvariant();
+						Info = world.Map.Rules.Actors[name];
+					}
+				}
+
 				foreach (var trait in Info.TraitsInConstructOrder())
 				{
 					AddTrait(trait.Create(init));
