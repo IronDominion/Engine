@@ -12,12 +12,21 @@
 namespace OpenRA.Traits
 {
 	[Desc("This actor has variations.")]
-	public class VariationsInfo : ITraitInfo
+	public class VariationsInfo : ITraitInfo, IRulesetLoaded
 	{
 		[FieldLoader.Require, Desc("Defines the list of variations this actor can turn into. Listing an entry multiple times will increase it's chance.")]
 		public string[] Variations = { };
 
 		public object Create(ActorInitializer init) { return new Variations(init.Self, this); }
+
+		void IRulesetLoaded<ActorInfo>.RulesetLoaded(Ruleset rules, ActorInfo info)
+		{
+			foreach (var item in Variations)
+			{
+				if (!rules.Actors.ContainsKey(item.ToLowerInvariant()))
+					throw new YamlException("Invalid variation {0} defined!".F(item.ToLowerInvariant()));
+			}
+		}
 	}
 
 	public class Variations
