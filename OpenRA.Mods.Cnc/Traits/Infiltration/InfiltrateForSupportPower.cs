@@ -19,6 +19,8 @@ namespace OpenRA.Mods.Cnc.Traits
 	{
 		[ActorReference, FieldLoader.Require] public readonly string Proxy = null;
 
+		public readonly bool PreventVariations = false;
+
 		public object Create(ActorInitializer init) { return new InfiltrateForSupportPower(this); }
 	}
 
@@ -35,7 +37,8 @@ namespace OpenRA.Mods.Cnc.Traits
 		{
 			infiltrator.World.AddFrameEndTask(w => w.CreateActor(info.Proxy, new TypeDictionary
 			{
-				new OwnerInit(infiltrator.Owner)
+				new OwnerInit(infiltrator.Owner),
+				new PreventVariationsInit(info.PreventVariations)
 			}));
 		}
 	}

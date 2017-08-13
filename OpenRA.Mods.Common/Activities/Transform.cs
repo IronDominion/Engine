@@ -21,6 +21,7 @@ namespace OpenRA.Mods.Common.Activities
 	public class Transform : Activity
 	{
 		public readonly string ToActor;
+		public bool PreventVariations = false;
 		public CVec Offset = CVec.Zero;
 		public int Facing = 96;
 		public string[] Sounds = { };
@@ -118,6 +119,9 @@ namespace OpenRA.Mods.Common.Activities
 
 				if (Faction != null)
 					init.Add(new FactionInit(Faction));
+
+				if (PreventVariations)
+					init.Add(new PreventVariationsInit());
 
 				var health = self.TraitOrDefault<Health>();
 				if (health != null)

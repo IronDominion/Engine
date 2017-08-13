@@ -20,6 +20,8 @@ namespace OpenRA.Mods.Common.Traits
 		[Desc("Which proxy actor, which grants the support power, to spawn.")]
 		[ActorReference, FieldLoader.Require] public readonly string Proxy = null;
 
+		public readonly bool PreventVariations = false;
+
 		public override object Create(ActorInitializer init) { return new SupportPowerCrateAction(init.Self, this); }
 	}
 
@@ -38,7 +40,8 @@ namespace OpenRA.Mods.Common.Traits
 		{
 			collector.World.AddFrameEndTask(w => w.CreateActor(info.Proxy, new TypeDictionary
 			{
-				new OwnerInit(collector.Owner)
+				new OwnerInit(collector.Owner),
+				new PreventVariationsInit(info.PreventVariations)
 			}));
 
 			base.Activate(collector);

@@ -27,6 +27,8 @@ namespace OpenRA.Mods.AS.Warheads
 		[Desc("Actors to spawn.")]
 		public readonly string[] Actors = { };
 
+		public readonly bool PreventVariations = false;
+
 		[Desc("Try to parachute the actors. When unset, actors will just fall down visually using FallRate."
 			+ " Requires the Parachutable trait on all actors if set.")]
 		public readonly bool Paradrop = false;
@@ -55,6 +57,9 @@ namespace OpenRA.Mods.AS.Warheads
 					td.Add(new OwnerInit(firedBy.Owner));
 				else
 					td.Add(new OwnerInit(firedBy.World.Players.First(p => p.InternalName == Owner)));
+
+				if (PreventVariations)
+					td.Add(new PreventVariationsInit());
 
 				var unit = firedBy.World.CreateActor(false, a.ToLowerInvariant(), td);
 

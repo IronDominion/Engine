@@ -22,6 +22,8 @@ namespace OpenRA.Mods.Common.Traits
 		[Desc("Name of the actor.")]
 		public readonly string Actor = null;
 
+		public readonly bool PreventVariations = false;
+
 		[Desc("Offset relative to the top-left cell of the building.")]
 		public readonly CVec SpawnOffset = CVec.Zero;
 
@@ -46,6 +48,7 @@ namespace OpenRA.Mods.Common.Traits
 					new LocationInit(init.Self.Location + info.SpawnOffset),
 					new OwnerInit(init.Self.Owner),
 					new FacingInit(info.Facing),
+					new PreventVariationsInit(info.PreventVariations)
 				});
 			});
 		}

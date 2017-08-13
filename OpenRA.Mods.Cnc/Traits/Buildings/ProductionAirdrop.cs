@@ -26,6 +26,8 @@ namespace OpenRA.Mods.Cnc.Traits
 		[Desc("Cargo aircraft used for delivery. Must have the `Aircraft` trait.")]
 		[ActorReference(typeof(AircraftInfo))] public readonly string ActorType = "c17";
 
+		public readonly bool PreventVariations = false;
+
 		public override object Create(ActorInitializer init) { return new ProductionAirdrop(init, this); }
 	}
 
@@ -66,7 +68,8 @@ namespace OpenRA.Mods.Cnc.Traits
 				{
 					new CenterPositionInit(w.Map.CenterOfCell(startPos) + new WVec(WDist.Zero, WDist.Zero, aircraftInfo.CruiseAltitude)),
 					new OwnerInit(owner),
-					new FacingInit(64)
+					new FacingInit(64),
+					new PreventVariationsInit(info.PreventVariations)
 				});
 
 				actor.QueueActivity(new Fly(actor, Target.FromPos(self.CenterPosition + new WVec(landDistance, 0, 0))));

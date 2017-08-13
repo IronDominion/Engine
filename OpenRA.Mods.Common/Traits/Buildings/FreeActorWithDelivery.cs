@@ -23,6 +23,8 @@ namespace OpenRA.Mods.Common.Traits
 		[Desc("Name of the delivering actor. This actor must have the `Carryall` trait")]
 		public readonly string DeliveringActor = null;
 
+		public readonly bool PreventDeliveringActorVariations = false;
+
 		[Desc("Cell coordinates for spawning the delivering actor. If left blank, the closest edge cell will be chosen.")]
 		public readonly CPos SpawnLocation = CPos.Zero;
 
@@ -86,13 +88,15 @@ namespace OpenRA.Mods.Common.Traits
 				new LocationInit(location),
 				new CenterPositionInit(spawn),
 				new OwnerInit(self.Owner),
-				new FacingInit(initialFacing)
+				new FacingInit(initialFacing),
+				new PreventVariationsInit(Info.PreventDeliveringActorVariations)
 			});
 
 			// Create delivered actor
 			cargo = self.World.CreateActor(false, actorName, new TypeDictionary
 			{
 				new OwnerInit(self.Owner),
+				new PreventVariationsInit(Info.PreventVariations)
 			});
 		}
 	}

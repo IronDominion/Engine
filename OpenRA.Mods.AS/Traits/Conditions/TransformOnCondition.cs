@@ -19,6 +19,7 @@ namespace OpenRA.Mods.AS.Traits
 	{
 		[ActorReference]
 		public readonly string IntoActor = null;
+		public readonly bool PreventVariations = false;
 		public readonly int ForceHealthPercentage = 0;
 		public readonly bool SkipMakeAnims = true;
 
@@ -40,7 +41,7 @@ namespace OpenRA.Mods.AS.Traits
 		protected override void TraitEnabled(Actor self)
 		{
 			var facing = self.TraitOrDefault<IFacing>();
-			var transform = new Transform(self, info.IntoActor) { ForceHealthPercentage = info.ForceHealthPercentage, Faction = faction };
+			var transform = new Transform(self, info.IntoActor) { ForceHealthPercentage = info.ForceHealthPercentage, Faction = faction, PreventVariations = info.PreventVariations };
 			if (facing != null) transform.Facing = facing.Facing;
 			transform.SkipMakeAnims = info.SkipMakeAnims;
 			self.CancelActivity();

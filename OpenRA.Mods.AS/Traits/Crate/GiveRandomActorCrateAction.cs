@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using OpenRA.Mods.Common.Traits;
 using OpenRA.Primitives;
+using OpenRA.Traits;
 
 namespace OpenRA.Mods.AS.Traits
 {
@@ -27,6 +28,8 @@ namespace OpenRA.Mods.AS.Traits
 
 		[Desc("Valid `EligibleForRandomActorCrate` types this crate can pick from.")]
 		public readonly HashSet<string> Type = new HashSet<string> { "crateunit" };
+
+		public readonly bool PreventVariations = false;
 
 		public override object Create(ActorInitializer init) { return new GiveRandomActorCrateAction(init.Self, this); }
 	}
@@ -102,6 +105,9 @@ namespace OpenRA.Mods.AS.Traits
 						new LocationInit(cell),
 						new OwnerInit(info.Owner ?? collector.Owner.InternalName)
 					};
+
+					if (info.PreventVariations)
+						td.Add(new PreventVariationsInit());
 
 					collector.World.AddFrameEndTask(w => w.CreateActor(unit.Name, td));
 

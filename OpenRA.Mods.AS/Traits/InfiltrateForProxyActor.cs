@@ -19,6 +19,8 @@ namespace OpenRA.Mods.AS.Traits
 		[ActorReference, FieldLoader.Require]
 		public readonly string ProxyActor = null;
 
+		public readonly bool PreventVariations = false;
+
 		public override object Create(ActorInitializer init) { return new InfiltrateForProxyActor(this); }
 	}
 
@@ -39,7 +41,8 @@ namespace OpenRA.Mods.AS.Traits
 
 			infiltrator.World.AddFrameEndTask(w => w.CreateActor(info.ProxyActor, new TypeDictionary
 			{
-				new OwnerInit(infiltrator.Owner)
+				new OwnerInit(infiltrator.Owner),
+				new PreventVariationsInit(info.PreventVariations)
 			}));
 		}
 	}
