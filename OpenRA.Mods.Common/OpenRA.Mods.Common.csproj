@@ -823,6 +823,7 @@
     <Compile Include="Traits\Render\ReloadArmamentsBar.cs" />
     <Compile Include="Warheads\TransferAmmoWarhead.cs" />
     <Compile Include="Traits\Conditions\GrantConditionOnAmmo.cs" />
+    <Compile Include="Graphics\UITextRenderable.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild">

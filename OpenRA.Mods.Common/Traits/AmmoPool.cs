@@ -37,6 +37,9 @@ namespace OpenRA.Mods.Common.Traits
 		[Desc("PipType to use for empty ammo.")]
 		public readonly PipType PipTypeEmpty = PipType.Transparent;
 
+		[Desc("Show the pips as text.")]
+		public readonly bool ShowAsTextPip = false;
+
 		[Desc("How much ammo is reloaded after a certain period.")]
 		public readonly int ReloadCount = 1;
 
@@ -58,12 +61,13 @@ namespace OpenRA.Mods.Common.Traits
 		public object Create(ActorInitializer init) { return new AmmoPool(init.Self, this); }
 	}
 
-	public class AmmoPool : INotifyAttack, IPips, ITick, ISync
+	public class AmmoPool : INotifyAttack, IPips, ITextPip, ITick, ISync
 	{
 		public readonly AmmoPoolInfo Info;
 		[Sync] public int CurrentAmmo;
 		[Sync] public int RemainingTicks;
 		public int PreviousAmmo;
+		string pipText;
 
 		public AmmoPool(Actor self, AmmoPoolInfo info)
 		{
@@ -75,6 +79,8 @@ namespace OpenRA.Mods.Common.Traits
 
 			RemainingTicks = Info.SelfReloadDelay;
 			PreviousAmmo = GetAmmoCount();
+
+			pipText = GetAmmoCount() + "/" + Info.Ammo;
 		}
 
 		public int GetAmmoCount() { return CurrentAmmo; }
@@ -97,6 +103,9 @@ namespace OpenRA.Mods.Common.Traits
 				return false;
 
 			CurrentAmmo += amount;
+
+			pipText = GetAmmoCount() + "/" + Info.Ammo;
+
 			return true;
 		}
 
@@ -133,11 +142,27 @@ namespace OpenRA.Mods.Common.Traits
 
 		public IEnumerable<PipType> GetPips(Actor self)
 		{
+			if (Info.ShowAsTextPip)
+				return null;
+
 			var pips = Info.PipCount >= 0 ? Info.PipCount : Info.Ammo;
 
 			return Enumerable.Range(0, pips).Select(i =>
 				(CurrentAmmo * pips) / Info.Ammo > i ?
 				Info.PipType : Info.PipTypeEmpty);
+		}
+
+		public PipType GetTextPipType(Actor self)
+		{
+			return Info.PipType;
+		}
+
+		public string GetTextPipText(Actor self)
+		{
+			if (!Info.ShowAsTextPip)
+				return null;
+
+			return pipText;
 		}
 	}
 }
